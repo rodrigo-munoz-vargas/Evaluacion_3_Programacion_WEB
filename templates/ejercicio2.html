@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Nombres</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="form-container ejercicio2">
+        <form method="POST" action="/ejercicio2">
+            <div class="mb-3">
+                <label for="nombre1" class="form-label">Nombre 1:</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="nombre1" 
+                    name="nombre1" 
+                    value="{{ nombre1 if nombre1 is not none else '' }}" 
+                    required>
+            </div>
+            <div class="mb-3">
+                <label for="nombre2" class="form-label">Nombre 2:</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="nombre2" 
+                    name="nombre2" 
+                    value="{{ nombre2 if nombre2 is not none else '' }}" 
+                    required>
+            </div>
+            <div class="mb-3">
+                <label for="nombre3" class="form-label">Nombre 3:</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="nombre3" 
+                    name="nombre3" 
+                    value="{{ nombre3 if nombre3 is not none else '' }}" 
+                    required>
+            </div>
+            <div class="btn-submit">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+        </form>
+
+        {% if nombre_mas_largo and longitud %}
+        <div class="result-container">
+            <p>El nombre con mayor cantidad de caracteres es : {{ nombre_mas_largo }}</p>
+            <p>El nombre tiene : {{ longitud }} caracteres</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
