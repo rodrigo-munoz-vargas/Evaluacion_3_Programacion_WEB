@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, abort
 
 app = Flask(__name__)
+
+# Almacen temp de registros
+registros = []
 
 
 @app.route('/')
@@ -10,18 +13,18 @@ def index():
 
 @app.route('/ejercicio1', methods=['GET', 'POST'])
 def ejercicio1():
-    # Variables para almacenar los valores ingresados
+    # Variables para los valores ingresados
     nota1 = nota2 = nota3 = asistencia = None
 
     if request.method == 'POST':
         try:
-            # Obtener las notas y asistencia desde el formulario
+            # Obteener notas y asistencia desde el formulario
             nota1 = request.form['nota1']
             nota2 = request.form['nota2']
             nota3 = request.form['nota3']
             asistencia = request.form['asistencia']
 
-            # Convertir los valores a float para cálculo con decimales
+            # Convertir valores a float para cálculo con decimales
             nota1_float = float(nota1)
             nota2_float = float(nota2)
             nota3_float = float(nota3)
@@ -47,7 +50,7 @@ def ejercicio1():
                 estado=estado
             )
         except ValueError:
-            # Manejar valores no válidos
+            # Manejar valores no validos
             return render_template(
                 'ejercicio1.html',
                 nota1=nota1,
@@ -86,6 +89,47 @@ def ejercicio2():
         nombre_mas_largo=nombre_mas_largo,
         longitud=longitud
     )
+
+
+@app.route('/redirigir')
+def redirigir():
+    # Redirigir a la pagina principal
+    return redirect(url_for('index'))
+
+
+@app.route('/error404')
+def error404():
+    # Devuelve un error 404
+    abort(404)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # Página para error 404
+    return render_template('404.html'), 404
+
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    global registros
+    if request.method == 'POST':
+        # Obtener datos del formulario
+        nombre = request.form.get('nombre')
+        edad = request.form.get('edad')
+
+        # Agregar registro a la lista
+        if nombre and edad:
+            registros.append({'nombre': nombre, 'edad': int(edad)})
+
+    # Mostrar registros almacenados
+    return render_template('registro.html', registros=registros)
+
+
+@app.route('/borrar_registros')
+def borrar_registros():
+    global registros
+    registros = []  # Limpiar lista de registros
+    return redirect(url_for('registro'))
 
 
 if __name__ == '__main__':
